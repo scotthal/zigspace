@@ -9,7 +9,8 @@
         "github.github-vscode-theme",
         "ms-azuretools.vscode-docker",
         "redhat.vscode-yaml",
-        "visualstudioexptteam.vscodeintellicode"
+        "visualstudioexptteam.vscodeintellicode",
+        "ziglang.vscode-zig"
       ]
     }
   }
