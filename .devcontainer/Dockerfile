@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM debian:latest
 
 ARG USERNAME=scotthal
 ARG USER_UID=1100
@@ -15,10 +15,17 @@ RUN apt-get update; \
   echo 'en_US.UTF-8 UTF-8' >> /etc/locale.gen; \
   locale-gen; \
   update-locale LANG=en_US.UTF-8; \
+  mkdir /tmp/zig-unz; \
+  curl -L https://ziglang.org/download/0.13.0/zig-linux-x86_64-0.13.0.tar.xz | xz -dc | tar -C /tmp/zig-unz -xf -; \
+  install /tmp/zig-unz/zig-linux*/zig /usr/local/bin; \
+  cp -a /tmp/zig-unz/zig-linux*/lib /usr/local/lib/zig; \
+  cp -a /tmp/zig-unz/zig-linux*/doc /usr/local/share/zig; \
+  rm -rf /tmp/zig-unz; \
   groupadd --gid $USER_GID $USERNAME; \
   useradd -s /bin/zsh --uid $USER_UID --gid $USER_GID -m $USERNAME; \
   echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME; \
   chmod 440 /etc/sudoers.d/$USERNAME; \
+  apt-get -y remove exim4-base postfix; \
   apt-get autoremove -y ;\
   apt-get clean -y; \
   rm -rf /var/lib/apt/lists/*
